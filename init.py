@@ -25,11 +25,14 @@ def parse(html):
             'link': link,
             'salary': salary.string,
         })
-    return vac
-
+    medsal = 0
+    for vacancy in vac:
+        print(vacancy)
+        medsal += int(vacancy['salary'].replace(' ', ''))
+    print('Средняя зарплата по больнице:', int(medsal / len(vac)), 'рублей')
 
 def main():
-    print(parse(get_data('http://74.ru/job/vacancy/?Where%5B%5D=1&Search=1&Query=%F1%E8%F1%F2%E5%EC%ED%FB%E9+%E0%E4%EC%E8%ED%E8%F1%F2%F0%E0%F2%EE%F0&SalaryMin=%C7%E0%F0%EF%EB%E0%F2%E0+%EE%F2%2C+%F0%F3%E1&BranchID=')))
+    parse(get_data('http://74.ru/job/vacancy/?Where%5B%5D=1&Search=1&Query=%F1%E8%F1%F2%E5%EC%ED%FB%E9+%E0%E4%EC%E8%ED%E8%F1%F2%F0%E0%F2%EE%F0&SalaryMin=%C7%E0%F0%EF%EB%E0%F2%E0+%EE%F2%2C+%F0%F3%E1&BranchID='))
 
 if __name__ == '__main__':
     main()
