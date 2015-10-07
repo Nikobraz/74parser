@@ -19,11 +19,13 @@ def parse(html):
         link = cols[1].a['href']
         salary = cols[1].find('div', class_='job_price').span
         if not (salary and salary.string):
-            continue
+            salary = '0'
+        else:
+            salary = salary.string
         vac.append({
             'title': title,
             'link': link,
-            'salary': salary.string,
+            'salary': salary,
         })
     medsal = 0
     for vacancy in vac:
