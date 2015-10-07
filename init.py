@@ -27,16 +27,20 @@ def parse(html):
         vac.append({
             'title': title,
             'link': link,
-            'salary': salary,
+            'salary': int(salary.replace(' ', '')),
         })
     medsal = 0
     for vacancy in vac:
         print(vacancy)
-        medsal += int(vacancy['salary'].replace(' ', ''))
+        medsal += vacancy['salary']
     print('Средняя зарплата по больнице:', int(medsal / (len(vac) - countzero)), 'рублей')
 
+
 def main():
-    parse(get_data('http://74.ru/job/vacancy/?Where%5B%5D=1&Search=1&Query=%F1%E8%F1%F2%E5%EC%ED%FB%E9+%E0%E4%EC%E8%ED%E8%F1%F2%F0%E0%F2%EE%F0&SalaryMin=%C7%E0%F0%EF%EB%E0%F2%E0+%EE%F2%2C+%F0%F3%E1&BranchID='))
+    csv.
+    parse(get_data('http://74.ru/job/vacancy/?Where%5B%5D=1&Search=1&Query=%F1%E8%F1%F2%E5%EC%ED%FB%E9+%E0%E4%EC%E8%ED'
+                   '%E8%F1%F2%F0%E0%F2%EE%F0&SalaryMin=%C7%E0%F0%EF%EB%E0%F2%E0+%EE%F2%2C+%F0%F3%E1&BranchID='))
+    input('Press Any Key To Exit')
 
 if __name__ == '__main__':
     main()
