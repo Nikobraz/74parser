@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 import urllib.request
+import re
 from bs4 import BeautifulSoup
 
 
@@ -19,27 +20,19 @@ def parse(html):
         cols = row.find_all('td')
         title = cols[1].a.text
         link = cols[1].a['href']
-        text_salary = cols[1].find('div', class_='job_price').text.strip()
         min_salary = ''
         max_salary = ''
         salary = ''
-        print(text_salary)
-        if text_salary.find('от') == 0:
-            min_salary = int(text_salary.replace(' ', '')[2:8])
-        if text_salary.find('до') != -1:
-            max_salary = text_salary[text_salary.find('до')+3:text_salary.find('до ')+9]
-            max_salary = int(max_salary.replace(' ', ''))
-        if text_salary.find('от') == -1 and text_salary.find('до') == -1:
-            salary = text_salary.replace(' ', '')[0:5]
-
-            if salary.isdigit():
-                salary = int(salary)
-            else:
-                salary = 0
-        if min_salary == 0 or max_salary == 0:
-            salary = min_salary + max_salary
-        if int(min_salary) > 0 and int(max_salary) > 0:
-            salary = (min_salary + max_salary) / 2
+        text_salary = cols[1].find('div', class_='job_price').text.strip().replace(' ', '')
+        text_salary = re.findall(r'\d{5}', text_salary)
+        if text_salary.__len__() == 2:
+            min_salary = text_salary[0]
+            max_salary = text_salary[1]
+            salary = (int(min_salary) + int(max_salary))/2
+        elif text_salary.__len__() == 1:
+            salary = text_salary[0]
+        else:
+            salary = 0
         if salary == 0:
             countzero += 1
 
@@ -48,7 +41,7 @@ def parse(html):
             'link': link,
             'min.salary': min_salary,
             'max.salary': max_salary,
-            'salary': salary,
+            'salary': int(salary),
         })
 
     medsal = 0
@@ -56,17 +49,6 @@ def parse(html):
         print(vacancy)
         medsal += vacancy['salary']
     print('Средняя зарплата по больнице:', int(medsal / (len(vac) - countzero)), 'рублей')
-'''        if not (min_salary and min_salary.string):
-            salary = '0'
-            countzero += 1
-        else:
-            min_salary = min_salary.string
-            print(min_salary)
-        vac.append({
-            'title': title,
-            'link': link,
-            'salary': int(min_salary.replace(' ', '')),
-        })'''
 
 
 def main():
